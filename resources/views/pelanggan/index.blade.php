@@ -34,6 +34,7 @@
                         <th style="width: 60px;">No</th>
                         <th>Nama Pelanggan</th>
                         <th>Nomor Telepon</th>
+                        <th>Alamat</th>
                         <th>Catatan Khusus</th>
                         <th style="width: 150px;">Aksi</th>
                     </tr>
@@ -44,6 +45,7 @@
                         <td>{{ $index + 1 }}</td>
                         <td>{{ $pelanggan->nama }}</td>
                         <td>{{ $pelanggan->no_telp }}</td>
+                        <td>{{ $pelanggan->alamat ?? '-' }}</td>
                         <td>{{ $pelanggan->catatan_khusus ?? '-' }}</td>
                         <td>
                             <button type="button" class="btn btn-sm btn-warning" data-bs-toggle="modal"
@@ -62,7 +64,7 @@
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="5" class="text-center text-muted">Belum ada data pelanggan.</td>
+                        <td colspan="6" class="text-center text-muted">Belum ada data pelanggan.</td>
                     </tr>
                     @endforelse
                 </tbody>
@@ -91,6 +93,10 @@
                     <input type="text" name="no_telp" class="form-control" value="{{ old('no_telp') }}" required>
                 </div>
                 <div class="mb-3">
+                    <label class="form-label">Alamat</label>
+                    <textarea name="alamat" class="form-control" rows="2">{{ old('alamat') }}</textarea>
+                </div>
+                <div class="mb-3">
                     <label class="form-label">Catatan Khusus</label>
                     <textarea name="catatan_khusus" class="form-control" rows="3">{{ old('catatan_khusus') }}</textarea>
                 </div>
@@ -103,7 +109,7 @@
     </div>
 </div>
 
-<!-- Loop Khusus untuk Modal Edit (Ditaruh di luar tabel) -->
+<!-- Modal Edit -->
 @foreach ($pelanggans as $pelanggan)
 <div class="modal fade" id="editPelangganModal-{{ $pelanggan->id }}" tabindex="-1"
     aria-labelledby="editPelangganModalLabel-{{ $pelanggan->id }}" aria-hidden="true">
@@ -127,6 +133,11 @@
                         value="{{ old('no_telp', $pelanggan->no_telp) }}" required>
                 </div>
                 <div class="mb-3">
+                    <label class="form-label">Alamat</label>
+                    <textarea name="alamat" class="form-control"
+                        rows="2">{{ old('alamat', $pelanggan->alamat) }}</textarea>
+                </div>
+                <div class="mb-3">
                     <label class="form-label">Catatan Khusus</label>
                     <textarea name="catatan_khusus" class="form-control"
                         rows="3">{{ old('catatan_khusus', $pelanggan->catatan_khusus) }}</textarea>
@@ -140,5 +151,4 @@
     </div>
 </div>
 @endforeach
-
 @endsection
