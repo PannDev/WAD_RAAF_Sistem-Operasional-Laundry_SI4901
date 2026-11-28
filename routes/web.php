@@ -1,11 +1,19 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PelangganController;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return redirect()->route('pelanggan.index');
+    return redirect()->route('login');
 });
 
-Route::resource('pelanggan', PelangganController::class); //Terdapat bug harap benarkan
-#nambah s
+Auth::routes();
+
+Route::middleware('auth')->group(function () {
+    Route::get('/home', function () {
+        return redirect()->route('pelanggan.index');
+    })->name('home');
+
+    Route::resource('pelanggan', PelangganController::class)->except(['create', 'show']);
+});

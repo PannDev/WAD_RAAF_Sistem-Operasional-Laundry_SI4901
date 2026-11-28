@@ -9,42 +9,59 @@ class PelangganController extends Controller
 {
     public function index()
     {
-        $pelanggans = Pelanggan::all();
-        return view('index', compact('pelanggans'));
+        $pelanggans = Pelanggan::orderByDesc('id')->get();
+
+        return view('pelanggan.index', compact('pelanggans'));
+    }
+
+    public function create()
+    {
+        return view('pelanggan.create');
     }
 
     public function store(Request $request)
     {
-        $request->validate([
-            'nama' => 'required',
-            'no_telp' => 'required',
-            'alamat' => 'required',
+        $validated = $request->validate([
+            'nama' => ['required', 'string', 'max:100'],
+            'no_telp' => ['required', 'string', 'max:20'],
+            'alamat' => ['nullable', 'string'],
+            'catatan_khusus' => ['nullable', 'string'],
         ]);
 
-        Pelanggan::create($request->all());
+        Pelanggan::create($validated);
 
-        return redirect()->route('pelanggan.index'); # add
-        //return redirect() pelanggan.index
+        return redirect()
+            ->route('pelanggan.index')
+            ->with('success', 'Data pelanggan berhasil ditambahkan.');
+    }
+
+    public function edit(Pelanggan $pelanggan)
+    {
+        return view('pelanggan.edit', compact('pelanggan'));
     }
 
     public function update(Request $request, Pelanggan $pelanggan)
     {
-        $request->validate([
-            'nama' => 'required',
-            'no_telp' => 'required',
-            'alamat' => 'required',
+        $validated = $request->validate([
+            'nama' => ['required', 'string', 'max:100'],
+            'no_telp' => ['required', 'string', 'max:20'],
+            'alamat' => ['nullable', 'string'],
+            'catatan_khusus' => ['nullable', 'string'],
         ]);
 
-        $pelanggan->update($request->all());
+        $pelanggan->update($validated);
 
-        return redirect()->route('pelanggan.index');
+        return redirect()
+            ->route('pelanggan.index')
+            ->with('success', 'Data pelanggan berhasil diperbarui.');
     }
 
     public function destroy(Pelanggan $pelanggan)
     {
-        //$pelanggan delete
-        $pelanggan-> delete();
+        $pelanggan->delete();
 
-        return redirect()->route('pelanggan.index');
+        return redirect()
+            ->route('pelanggan.index')
+            ->with('success', 'Data pelanggan berhasil dihapus.');
     }
 }
