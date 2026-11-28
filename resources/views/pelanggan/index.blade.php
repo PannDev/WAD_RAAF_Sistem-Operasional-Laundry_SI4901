@@ -26,7 +26,7 @@
     </div>
     @endif
 
-    <div class="card">
+    <div class="card mb-4">
         <div class="card-body table-responsive">
             <table class="table table-bordered table-hover align-middle mb-0">
                 <thead>
@@ -60,45 +60,6 @@
                             </form>
                         </td>
                     </tr>
-
-                    <!-- Modal Edit -->
-                    <div class="modal fade" id="editPelangganModal-{{ $pelanggan->id }}" tabindex="-1"
-                        aria-hidden="true">
-                        <div class="modal-dialog">
-                            <form action="{{ route('pelanggan.update', $pelanggan->id) }}" method="POST"
-                                class="modal-content">
-                                @csrf
-                                @method('PUT')
-                                <div class="modal-header">
-                                    <h5 class="modal-title">Edit Data Pelanggan</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                        aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <div class="mb-3">
-                                        <label class="form-label">Nama Pelanggan</label>
-                                        <input type="text" name="nama" class="form-control"
-                                            value="{{ old('nama', $pelanggan->nama) }}" required>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label class="form-label">Nomor Telepon</label>
-                                        <input type="text" name="no_telp" class="form-control"
-                                            value="{{ old('no_telp', $pelanggan->no_telp) }}" required>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label class="form-label">Catatan Khusus</label>
-                                        <textarea name="catatan_khusus" class="form-control"
-                                            rows="3">{{ old('catatan_khusus', $pelanggan->catatan_khusus) }}</textarea>
-                                    </div>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary"
-                                        data-bs-dismiss="modal">Batal</button>
-                                    <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
                     @empty
                     <tr>
                         <td colspan="5" class="text-center text-muted">Belum ada data pelanggan.</td>
@@ -111,12 +72,13 @@
 </div>
 
 <!-- Modal Tambah -->
-<div class="modal fade" id="tambahPelangganModal" tabindex="-1" aria-hidden="true">
+<div class="modal fade" id="tambahPelangganModal" tabindex="-1" aria-labelledby="tambahPelangganModalLabel"
+    aria-hidden="true">
     <div class="modal-dialog">
         <form action="{{ route('pelanggan.store') }}" method="POST" class="modal-content">
             @csrf
             <div class="modal-header">
-                <h5 class="modal-title">Tambah Pelanggan</h5>
+                <h5 class="modal-title" id="tambahPelangganModalLabel">Tambah Pelanggan</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -140,4 +102,43 @@
         </form>
     </div>
 </div>
+
+<!-- Loop Khusus untuk Modal Edit (Ditaruh di luar tabel) -->
+@foreach ($pelanggans as $pelanggan)
+<div class="modal fade" id="editPelangganModal-{{ $pelanggan->id }}" tabindex="-1"
+    aria-labelledby="editPelangganModalLabel-{{ $pelanggan->id }}" aria-hidden="true">
+    <div class="modal-dialog">
+        <form action="{{ route('pelanggan.update', $pelanggan->id) }}" method="POST" class="modal-content">
+            @csrf
+            @method('PUT')
+            <div class="modal-header">
+                <h5 class="modal-title" id="editPelangganModalLabel-{{ $pelanggan->id }}">Edit Data Pelanggan</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label class="form-label">Nama Pelanggan</label>
+                    <input type="text" name="nama" class="form-control" value="{{ old('nama', $pelanggan->nama) }}"
+                        required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Nomor Telepon</label>
+                    <input type="text" name="no_telp" class="form-control"
+                        value="{{ old('no_telp', $pelanggan->no_telp) }}" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Catatan Khusus</label>
+                    <textarea name="catatan_khusus" class="form-control"
+                        rows="3">{{ old('catatan_khusus', $pelanggan->catatan_khusus) }}</textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+            </div>
+        </form>
+    </div>
+</div>
+@endforeach
+
 @endsection
